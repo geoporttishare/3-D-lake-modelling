@@ -18,7 +18,7 @@ weather or hydrological data.
 
 ### Puhti
 
-To run the code on Puhti, install the code on location of your choosing. The
+To run the code on CSC's Puhti platform, install the code on location of your choosing. The
 code has been tested with Python 3, but should also run under Python 2 with minor
 changes.
 
@@ -185,6 +185,10 @@ in July 2017 at 15 minute intervals:
 
 4. Data is fetched and possibly combined from multiple observation stations
 and dumped to standard out (screen).
+
+5. Note that the fetched data is always instantaneous (or nearly so) and is not averaged
+to the fetched interval. It is possible to also fetch e.g. daily averages by slightly
+modifying the code to ask for the correct values.
 
 
 ## Licensing
