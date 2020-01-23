@@ -19,7 +19,7 @@ import sys
 #
 # oGIIR project
 # Janne Ropponen/SYKE
-# Last changed: 2019-12-17
+# Last changed: 2020-01-23
 ##########################################################################
 
 ####################################################################
@@ -231,7 +231,12 @@ def applyLevelCorr(Wdata, ODATA_URL, heightsystem):
               + " and TasoKoordinaatisto eq \'" + heightsystem + "\'" 
       payload = {'$filter' : filter}
       data = getOData(ODATA_URL, payload) # Example reply: {u'odata.metadata': u'http://rajapinnat.ymparisto.fi/api/Hydrologiarajapinta/1.1/odata/$metadata#VedenkTasoTieto', u'value': [{u'Tasokorjaus': 4408, u'TasoKoordinaatisto': u'N60', u'Korkeustaso_Id': 1, u'Paikka_Id': 2168}]}
-      bias = float(data['value'][0]['Tasokorjaus']) 
+      if data['value']:
+         bias = float(data['value'][0]['Tasokorjaus'])
+      else:
+         print("WARNING: Could not apply", heightsystem,
+               "level correction to site", site, ": level not found.")
+         bias = 0.0
       if bias != 0.0:
          for i, meas in enumerate(Wdata[site]):
             Wdata[site][i]['Arvo'] += bias
