@@ -31,10 +31,11 @@ import xml.etree.ElementTree
 #
 # oGIIR project
 # Janne Ropponen/SYKE
-# Last changed: 2019-12-12
+# Last changed: 2020-05-14: various fixes to improve compatibility
 ##########################################################################
 
 # Improvements TO DO:
+# * Handle situations where different number of data is returned for multiple stations.
 # * Fill (interpolate) gaps
 # * Postprocess msl atmpres to local atmpres, wind to components, rain to mm/s etc.
 # * Rain NaN = 0.0
@@ -60,8 +61,8 @@ def readWeatherStationsFile(stationsfile, x, y):
    Returns a stations dictionary with FMISIDs as keys.
    """
    stations = {}
-   proj_etrstm35fin = pyproj.Proj(init='epsg:3067')
-   proj_wgs84 = pyproj.Proj(init='epsg:4326')
+   proj_etrstm35fin = pyproj.Proj('epsg:3067')
+   proj_wgs84 = pyproj.Proj('epsg:4326')
    # Need to project wgs84 coordinates to etrs-tm35fin in order to reliably compare distances
    # because shapely distance expresses the Euclidean distance between points.
    p = Point(x,y) # Lake location in etrs-tm35fin
@@ -79,7 +80,7 @@ def readWeatherStationsFile(stationsfile, x, y):
             stations[row[1]]['startyear'] = row[8]
             stations[row[1]]['endyear'] = row[9]
             stations[row[1]]['types'] = types
-            coords = pyproj.transform(proj_wgs84,proj_etrstm35fin,row[5],row[4])
+            coords = pyproj.transform(proj_wgs84,proj_etrstm35fin,float(row[5]),float(row[4]),always_xy=True)
             distance = p.distance(Point(coords))
             stations[row[1]]['xloc'] = coords[0]
             stations[row[1]]['yloc'] = coords[1]
@@ -183,11 +184,21 @@ def processWFSResponse(response):
       xmlstring = response.getvalue()
    except AttributeError: 
       xmlstring = response.read()
+   try:
+      xmlstring = xmlstring.encode() # Make sure response is in bytes 
+   except AttributeError:
+      pass
    # A hack to remove namespaces and gml attributes from XML response
    # to make further processing easier. Yeah, not proud about this. But it works.
-   xmlstring = re.sub('<[a-zA-Z0-9]*?:', '<',  xmlstring) # Strip namespace:xxx attributes from all tag beginnings
-   xmlstring = re.sub('</.*?:',          '</', xmlstring) # Strip namespace:xxx attributes from all tag ends
-   xmlstring = re.sub('gml:',            '',   xmlstring) # Strip gml: attributes from all tag ends
+   #  - recipe 1: Strip namespace:xxx attributes from all tag beginnings
+   #  - recipe 2: Strip namespace:xxx attributes from all tag end
+   #  - recipe 3: Strip gml: attributes from all tag ends
+   recipes = [ ('<[a-zA-Z0-9]*?:','<'), ('</.*?:','</'), ('gml:','') ]
+   for recipe in recipes:
+      try:
+         xmlstring = re.sub(recipe[0], recipe[1], xmlstring)
+      except TypeError: # Depending on implementation, xmlstring is returned as string or bytes
+         xmlstring = re.sub(recipe[0].encode(), recipe[1].encode(), xmlstring)
    #
    # Convert data from xml string to json to dictionary using the BadgerFish notation
    bf = xmljson.BadgerFish()
@@ -218,7 +229,9 @@ def processWFSResponse(response):
                     ['result']['MultiPointCoverage']['rangeType']['DataRecord'] \
                     ['field']
       #
-      if len(varlist[0])==1: # Try to recognise if returned data is STRING instead of a LIST
+      try:
+         temp = len(varlist[0]) # Try to recognise if returned data is LIST 
+      except KeyError:
          varlist = [varlist] # Convert string to list with only element being the string
       nbvars = len(varlist)
       varnames = []
