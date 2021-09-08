@@ -26,6 +26,7 @@ The following extra environment might be needed:
 ```
 module load geoconda
 pip install xmljson --user
+pip install owslib --user
 ```
 
 ### Other platforms
@@ -81,7 +82,7 @@ Can be downloaded from syke.fi --> Open information --> Spatial datasets --> Dat
 
 The scripts fetch open data from following remote sources:
 
-- TrafiCom's depth data for selected lakes from [Väylä's Web Feature Service](https://vayla.fi/web/en/open-data/download_services)
+- Traficom's depth data for selected lakes from [Traficom's Web Feature Service](https://www.traficom.fi/en/statistics-and-publications/spatial-dataset-material/calls-interfaces)
 (WFS).
 
 - Hydrological data from [Finnish Environment Institute's](https://www.syke.fi/en-US/Open_information/Open_web_services/Environmental_data_API)
