@@ -44,8 +44,8 @@ def getLakeShape(SYKERANTA10SHP,X,Y):
    if gdf_lake.empty or len(gdf_lake)>1:
       print("Ambiguous point.", len(gdf_lake), "matches found.")
       sys.exit(1)  
-   print("Extracted lake", gdf_lake.iloc[0]['Nimi'], "with area", 
-         gdf_lake.iloc[0]['Shape_area']/10**6, "km2.")
+   print("Extracted lake", gdf_lake.iloc[0]['nimi'], "with area", 
+         gdf_lake.iloc[0]['Shape_STAr']/10**6, "km2.")
    return gdf_lake
 
 

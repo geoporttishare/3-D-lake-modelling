@@ -29,7 +29,7 @@ CHANNELDB = "/appl/data/geo/syke/uomaverkosto/Uoma10.shp"
 ####################################
 
 # TrafiCom depth data WFS URL
-TRAFICOMURL = "https://julkinen.vayla.fi/inspirepalvelu/rajoitettu/wfs?request=getcapabilities"
+TRAFICOMURL = "https://julkinen.traficom.fi/inspirepalvelu/rajoitettu/wfs?request=getcapabilities"
 
 # SYKE hydrological database OData URL and settings
 ODATA_BASE_URL = "http://rajapinnat.ymparisto.fi/api/Hydrologiarajapinta/1.1/odata/"
@@ -53,15 +53,15 @@ FMITIMESTEP = 10 # (minutes) Min & Max time must be consistent with timestep, i.
 # GENERAL SETTINGS
 ######################
 
-UTCTIME_MIN = "2016-07-01T00:00:00.000Z" # Temporal data fetch start time
-UTCTIME_MAX = "2016-08-01T00:00:00.000Z" # Temporal data fetch end time
+UTCTIME_MIN = "2021-07-01T00:00:00.000Z" # Temporal data fetch start time
+UTCTIME_MAX = "2021-08-01T00:00:00.000Z" # Temporal data fetch end time
 
 POINTCLOUDFILE = "pointcloud.dat" # Output file for point cloud
 
 HEIGHTSYSTEM = "N60" # Get data in this elevation system (terrain database uses N60)
 
 AREATOLERANCE = 1.0 # [m2] Tolerance in area calculations
-GRIDRESOLUTION = 250.0 # [m] Depth grid resolution
+GRIDRESOLUTION = 50.0 # [m] Depth grid resolution
 BUFFERZONE = 100.0 + 3.0*GRIDRESOLUTION # Bufferzone outside the lake within which height data is collected. Also acts as a guarantee that we get correct MWL and lake name points within the loaded map sheets.
 SEARCHRADIUS = 500.0 # [m] Radius when searching for MWL and name points for lake polygon
 CHANNELSEARCHRADIUS = 10.0 # [m] Radius from lake polygon border when searching for incoming/outgoing rivers
@@ -99,8 +99,8 @@ COHERENS_USRDEFMODEL = 'Usrdef_Model.f90'
 #POINTX = 482668.0 # Puula
 #POINTY = 6847723.0 # Puula
 
-POINTX = 261559.0 # Karhijarvi
-POINTY = 6835970.0 # Karhijarvi
+#POINTX = 261559.0 # Karhijarvi
+#POINTY = 6835970.0 # Karhijarvi
 
 #POINTX = 543122.0 # Syvari (only LiVi depths)
 #POINTY = 7032548.0
@@ -123,6 +123,15 @@ POINTY = 6835970.0 # Karhijarvi
 #POINTX = 246111.0 # Sakylan Pyhajarvi
 #POINTY = 6772561.0
 
-#POINTX = 436446.0 # Jyvasjarvi
-#POINTY = 6901246.0
+POINTX = 436446.0 # Jyvasjarvi
+POINTY = 6901246.0
+
+#POINTX = 284691.0 # Rautavesi
+#POINTY = 6808657.0
+
+#POINTX = 302396.0 # Kulovesi
+#POINTY = 6819888.0
+
+# POINTX = 377144.0 # Pyhajarvi (Hauho)
+# POINTY = 6783843.0
 

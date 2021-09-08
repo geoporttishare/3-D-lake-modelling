@@ -3,10 +3,11 @@
 # oGIIR project
 #
 # Janne Ropponen, Finnish Environment Institute
-# 2019
+# 2019-2021
 #
 # Changelog:
 # ----------
+# 2021-09-08 Pyproj changes
 # 2019-09-20 First version
 
 from string import Template
@@ -110,12 +111,11 @@ def build(locslist, W_locs, model, nx, ny, mwl, grid3d):
    #time_zone = 2.0
    model['time_zone'] = 0.0 # UTC
    
-   proj_etrstm35fin = pyproj.Proj(init='epsg:3067')
-   proj_wgs84 = pyproj.Proj(init='epsg:4326')
-   coords = pyproj.transform(proj_etrstm35fin,proj_wgs84,config.POINTX,config.POINTY)
-   model['dlat_ref'] = coords[1]
-   model['dlon_ref'] = coords[0]
-   
+   transformer = pyproj.Transformer.from_crs('epsg:3067','epsg:4258') # etrstm35fin -> etsr89 (~wgs84)
+   coords = transformer.transform(config.POINTX,config.POINTY)
+   model['dlat_ref'] = coords[0]
+   model['dlon_ref'] = coords[1]
+
    model['nc'] = nx
    model['nr'] = ny
    model['nz'] = config.COHERENS_NZ

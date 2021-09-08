@@ -22,7 +22,7 @@
 # 4) SYKE channel network geodatabase
 # 5) Map sheet geodatabase for figuring out how NLS data is divided between files
 
-# Last changed: 2019-12-17 / JR
+# Last changed: 2021-09-08 / JR
 
 from __future__ import print_function
 from scipy import interpolate
@@ -37,7 +37,7 @@ import sys
 import shapely
 
 import config # Parameters etc
-import VAYLAdata
+import TRAFICOMdata
 import SYKEdata
 import FMIwfs
 import ranta10
@@ -204,7 +204,7 @@ def generate_grid_smart(points, resolution, MWL, interpolationmethod='linear'):
    nx = len(hix)
    ny = len(hiy)
    # Sort all data by y-coordinate
-   sortedpoints = numpy.sort(points.view('f8,f8,f8'), order=['f1'], axis=0).view(numpy.float)
+   sortedpoints = numpy.sort(points.view('f8,f8,f8'), order=['f1'], axis=0).view(float)
    nearest = numpy.full((nx-1,ny-1),numpy.nan)
    dbgsum = 0
    # Decimate data to regular grid cell by cell. Average original data to cells.
@@ -213,7 +213,7 @@ def generate_grid_smart(points, resolution, MWL, interpolationmethod='linear'):
    for j in range(0,ny-1): # row loop from bottom of the grid to the top
       #print("Row",j+1,"of",ny-1,"(",100*j/(ny-1),"% )")
       rowpoints = sortedpoints[sortedpoints[:,1]<hiy[j+1]] # Get points in this row
-      rowpoints = numpy.sort(rowpoints.view('f8,f8,f8'), order=['f0'], axis=0).view(numpy.float) # Sort by columns
+      rowpoints = numpy.sort(rowpoints.view('f8,f8,f8'), order=['f0'], axis=0).view(float) # Sort by columns
       sortedpoints = sortedpoints[sortedpoints[:,1]>=hiy[j+1]]
       idx = 0
       plen = len(rowpoints)
@@ -626,11 +626,11 @@ print("Generating point cloud")
 depthpoints = FeaturesToXYZ(gdf_depthpoints, 'TEKSTI', mwl, -1.0)
 depthpoints += FeaturesToXYZ(gdf_depths, 'KORARV', mwl, -1.0)
 
-# If no depth data found, try to get TrafiCom's data for the area
+# If no depth data found, try to get Traficom's data for the area
 if len(depthpoints) == 0:
    print("Zero depth points found in terrain database.")
    print("Checking if Finnish Transport and Communications Agency has depth data for this area.")
-   depthpoints = VAYLAdata.getTrafiComDepths(config, poly_lake, mwl)
+   depthpoints = TRAFICOMdata.getTraficomDepths(config, poly_lake, mwl)
 
 heightpoints = FeaturesToXYZ(gdf_heights, 'KORARV')
 shorepoints = PolygonToXYZ(poly_lake, mwl)
