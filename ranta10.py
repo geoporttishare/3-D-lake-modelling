@@ -77,7 +77,7 @@ def getSheets(MAPSHEETFILE, gdf, BUFFERZONE):
 
    # Generate list of sheet names
    sheets = []
-   for i in range(1,len(gdf_sheets)):
+   for i in range(0,len(gdf_sheets)):
       sheets.append(str(gdf_sheets.iloc[i]['LEHTITUNNU']))
    print("Found",len(gdf_sheets),"map sheets:",sheets)
 
