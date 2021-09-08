@@ -120,11 +120,11 @@ COHERENS_USRDEFMODEL = 'Usrdef_Model.f90'
 #POINTX = 511853.0 # Heinanen
 #POINTY = 6950931.0 # Heinanen
 
-#POINTX = 246111.0 # Sakylan Pyhajarvi
-#POINTY = 6772561.0
+POINTX = 246111.0 # Sakylan Pyhajarvi
+POINTY = 6772561.0
 
-POINTX = 436446.0 # Jyvasjarvi
-POINTY = 6901246.0
+#POINTX = 436446.0 # Jyvasjarvi
+#POINTY = 6901246.0
 
 #POINTX = 284691.0 # Rautavesi
 #POINTY = 6808657.0
