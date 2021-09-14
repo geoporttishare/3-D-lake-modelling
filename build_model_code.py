@@ -15,6 +15,7 @@ from dateutil import parser as dateparser
 from fractions import Fraction
 
 import codecs
+import math
 import pyproj
 
 import config
